@@ -4,20 +4,15 @@
 
 ## 📚 What is an API Route?
 
-An **API Route** is a URL endpoint on your server that handles requests and sends back data.
+An **API Route** is a server endpoint (URL + HTTP method combination) that receives requests and returns responses containing data or status codes.
 
-**How it works:**
+**Request/Response Cycle:**
 
-1. Client (browser) sends a request to an endpoint (e.g., `/puppies`)
-2. Server receives the request with an HTTP method (GET, POST, etc.)
-3. Server processes the request (fetch from database, validate, etc.)
-4. Server sends back a response (data, success/error status)
-
-Think of it like ordering at a restaurant:
-
-- 📞 You call (send a request)
-- 👨‍🍳 Chef processes your order (server logic)
-- 🍽️ Food arrives (response with data)
+1. Client constructs HTTP request targeting specific endpoint (e.g., `GET /puppies`)
+2. Server's routing layer matches request to handler function based on method and path
+3. Handler executes business logic (database queries, validation, computation)
+4. Server serializes response (typically JSON) with appropriate HTTP status code
+5. Client receives response and processes data or error state
 
 ---
 
@@ -38,9 +33,9 @@ Think of it like ordering at a restaurant:
 
 #### 🔍 **GET** – Read Data (Safe & Idempotent)
 
-- **What:** Fetch data from the server
-- **Why:** Display information to users
-- **Idempotent:** Calling it multiple times returns the same result
+- **Semantics:** Retrieves resource representation without modifying server state
+- **Idempotency:** Multiple identical requests produce identical results; no side effects
+- **Cacheability:** Responses eligible for HTTP caching mechanisms
 - **Example use cases:**
   ```js
   GET / friends; // Get all your friends
@@ -51,8 +46,8 @@ Think of it like ordering at a restaurant:
 
 #### ✏️ **POST** – Create New Data
 
-- **What:** Send data to server to create a new resource
-- **Why:** Add new items (posts, users, comments, etc.)
+- **Semantics:** Submits data to server for resource creation; may trigger side effects
+- **Non-Idempotent:** Repeated requests create multiple resources (unless client implements deduplication)
 - **Example use cases:**
   ```js
   POST /puppies { name: "Buddy", breed: "Golden" }  // Create new puppy
@@ -62,8 +57,8 @@ Think of it like ordering at a restaurant:
 
 #### ✏️ **PUT** – Replace Entire Resource
 
-- **What:** Replace ALL data for a specific resource
-- **When to use:** Less common; use when you're replacing everything
+- **Semantics:** Replaces entire resource representation; idempotent operation
+- **Practical Use:** Less common in modern APIs; PATCH preferred for partial updates
 - **Example:**
   ```js
   PUT /puppies/9 { name: "Max", breed: "Labrador", age: 5 }
@@ -72,8 +67,8 @@ Think of it like ordering at a restaurant:
 
 #### 🔄 **PATCH** – Partial Update
 
-- **What:** Update ONLY the fields you send (the rest stays the same)
-- **When to use:** More common than PUT
+- **Semantics:** Applies partial modifications to resource; updates specified fields only
+- **Prevalence:** Industry standard for update operations in modern REST APIs
 - **Example:**
   ```js
   PATCH /puppies/7 { name: "NewName" }

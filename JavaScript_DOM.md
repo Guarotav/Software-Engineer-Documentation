@@ -4,29 +4,21 @@
 
 ## 🌐 What is the DOM (Document Object Model)?
 
-The **DOM** is the browser's live, in-memory representation of your HTML page.
+The **DOM** is the browser's runtime in-memory representation of parsed HTML markup, accessible and modifiable via JavaScript APIs.
 
-**Key concept:** Your HTML file is static. The **DOM** is dynamic.
+**Fundamental distinction:** HTML source files are static; the DOM is a dynamic, mutable object tree instantiated by the browser.
 
-- **HTML file** = Static code on disk (`.html`)
-- **DOM** = Live JavaScript object tree in the browser's memory
+- **HTML file** – Static markup file on disk (`.html`)
+- **DOM** – Runtime object tree in browser memory
 
-When you load a webpage:
+**Instantiation flow:**
 
-1. Browser reads `.html` file
-2. Browser creates the DOM (a tree of objects)
-3. Browser renders it on screen
-4. JavaScript can now manipulate the DOM (change text, add elements, hide things, etc.)
+1. Browser fetches and parses HTML markup
+2. Parser constructs DOM tree corresponding to element hierarchy
+3. Browser renders tree to viewport
+4. JavaScript can now query and mutate DOM nodes at runtime
 
-```text
-HTML File                DOM Tree (in Memory)
-<html>          →       html
-  <body>         →        ├── body
-    <h1>           →      │   ├── h1
-    <button>        →      │   └── button
-```
-
-**Why care?** The DOM is what you actually interact with when coding JavaScript. HTML is just the starting point.
+**Relevance:** JavaScript operates exclusively on DOM nodes, not the source HTML file. All DOM modifications are transient unless persisted server-side.
 
 ---
 
@@ -88,8 +80,8 @@ Each item is called a **node**. Nodes can be:
 
 ### 📦 `Array.isArray()` – Type Checking
 
-- This method checks if a value is an **actual array**.
-- You should **not** use `typeof` to test for arrays because `typeof []` returns `"object"`.
+- This method validates whether a value is an array instance, distinct from array-like objects
+- Returns boolean indicating array status
 
 #### ✅ Example:
 
@@ -102,23 +94,18 @@ Array.isArray({}); // false
 **Why?** Arrays are technically objects in JavaScript. `Array.isArray()` specifically checks if something is an array.
 
 - DOM = **Document Object Model**
-- It is the **browser’s representation** of your HTML page.
-- It allows JavaScript to:
-  - Read and update content
-  - Handle events (clicks, typing, etc.)
-  - Dynamically add or remove elements
+- It is the browser's runtime representation of parsed HTML markup.
 
 ---
 
 ### 🆚 HTML vs DOM
 
-| HTML                             | DOM                                            |
-| -------------------------------- | ---------------------------------------------- |
-| Static code written in `.html`   | Live in-memory structure used by the browser   |
-| What you write                   | What the browser builds and interacts with     |
-| Doesn't change unless you reload | Can be updated via JavaScript (without reload) |
-
-> The DOM turns your HTML into a **tree of JavaScript objects (nodes)**.
+| HTML                              | DOM                                   |
+| --------------------------------- | ------------------------------------- |
+| Static markup file                | Runtime object tree in browser memory |
+| Source code on disk               | Parsed and instantiated structure     |
+| Immutable (without server reload) | Mutable via JavaScript APIs           |
+| Text-based                        | Interconnected node objects           |
 
 ---
 
@@ -219,58 +206,49 @@ const childrenArray = [...parent.children];
 
 ## 🧠 What is a JavaScript Event?
 
-**Events** are things that happen on the page. Your JavaScript code responds to them.
+**Events** represent user interactions and browser lifecycle changes that an application can subscribe to and handle.
 
-**Common events:**
+**Event types:**
 
-- `click` - User clicks an element
-- `submit` - User submits a form
-- `input` / `change` - Input value changes
-- `keydown` / `keyup` - Keyboard key pressed/released
-- `mouseover` / `mouseout` - Mouse enters/leaves element
-- `load` - Page finishes loading
-- `scroll` - Page scrolls
+- `click` – Mouse button clicked on element
+- `submit` – Form submission triggered
+- `input` / `change` – Form input value changed
+- `keydown` / `keyup` – Keyboard key pressed/released
+- `mouseover` / `mouseout` – Mouse enters/leaves element boundary
+- `load` – Document fully parsed and resources loaded
+- `scroll` – Viewport scrolled
 
-#### How Events Work:
+#### Event Propagation:
 
 ```text
-User Action (clicks button)
+User Interaction (click element)
         ↓
-Browser detects the event
+Browser Event System fires event
         ↓
-Triggers your callback function
+Executes attached event listeners
         ↓
-Your code runs
+Listeners invoke callback functions
         ↓
-DOM updates
+Application logic executes
         ↓
-Page changes
+DOM/State modifications occur
 ```
 
-#### Example:
+#### Listener Registration:
 
 ```js
-const button = document.getElementById("myButton");
-
-button.addEventListener("click", () => {
-  alert("Button clicked!");
+element.addEventListener("click", (event) => {
+  // Callback execution triggered on event emission
 });
 ```
 
-**What's happening:**
-
-1. User clicks the button
-2. Browser detects "click" event
-3. Your callback function `() => { alert(...) }` runs
-4. User sees alert
-
-**Event handler** = The callback function you provide. It runs **in response** to an event.
+**Event handler** = Callback function registered as listener. Executes asynchronously upon event occurrence.
 
 ---
 
 ### 📋 Common Event Patterns
 
-#### Click handler:
+#### Click Listener:
 
 ```js
 button.addEventListener("click", (event) => {
@@ -319,8 +297,8 @@ element.addEventListener("click", (event) => {
 
 **Understanding the architecture:**
 
-**Client** = Browser (user's computer) - **What you control with JavaScript**
-**Server** = Web server (someone else's computer) - **Processes requests, stores data**
+**Client** = Browser environment with JavaScript runtime
+**Server** = Backend process managing persistent state and business logic
 
 ### Client-Side (Browser - Your Domain):
 
