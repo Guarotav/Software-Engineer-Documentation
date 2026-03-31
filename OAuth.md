@@ -4,7 +4,7 @@
 
 ### 🧠 What is OAuth?
 
-OAuth (Open Authorization) is a **secure authorization protocol** that allows apps to access **user data** without sharing login credentials (like passwords).
+OAuth (Open Authorization) is a **secure authorization protocol** (rules for safely granting permission) that allows apps to access **user data** without sharing login credentials (like passwords).
 
 > 🔑 It lets users **grant limited access** to their data on another service (like Google, GitHub, or Facebook).
 
@@ -26,8 +26,8 @@ OAuth (Open Authorization) is a **secure authorization protocol** that allows ap
 1. **User clicks "Login with Google"**
 2. App (Client) redirects to **Google's Auth Server**
 3. User logs in and **approves** the app’s request
-4. Google sends back an **Authorization Code**
-5. The app exchanges that code for an **Access Token**
+4. Google sends back an **Authorization Code** (temporary proof that user approved)
+5. The app exchanges that code for an **Access Token** (ticket that grants access to user data)
 6. App uses that token to access the **user’s data** from the API
 
 ---
@@ -108,8 +108,8 @@ OAuth (Open Authorization) is a **secure authorization protocol** that allows ap
    ↓
 7. Your server exchanges the code for an Access Token:
    POST to Google with:
-   - client_id
-   - client_secret (kept secret on server!)
+   - client_id (unique identifier for your app)
+   - client_secret (password for your app—kept secret on server!)
    - code (from step 6)
    ↓
 8. Google responds with Access Token:
@@ -191,9 +191,9 @@ app.listen(3000);
 
 ### 💬 Common Terms
 
-- **Scope** – What kind of access the app is asking for (e.g. `email`, `profile`)
-- **Consent screen** – What the user sees before approving
-- **Redirect URI** – Where the authorization server sends the response
+- **Scope** – What kind of access the app is asking for (e.g., `email` = read email, `profile` = read name/photo)
+- **Consent screen** – Dialog shown to user asking "Do you want MyApp to access your email?"
+- **Redirect URI** – Where the authorization server sends the response after user approves (your callback URL)
 
 ---
 

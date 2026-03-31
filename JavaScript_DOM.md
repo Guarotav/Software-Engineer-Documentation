@@ -4,21 +4,21 @@
 
 ## 🌐 What is the DOM (Document Object Model)?
 
-The **DOM** is the browser's runtime in-memory representation of parsed HTML markup, accessible and modifiable via JavaScript APIs.
+The **DOM** is the browser's runtime (while the page is loaded) in-memory (temporarily stored in RAM) representation of parsed HTML markup, accessible and modifiable via JavaScript APIs.
 
-**Fundamental distinction:** HTML source files are static; the DOM is a dynamic, mutable object tree instantiated by the browser.
+**Fundamental distinction:** HTML source files are static; the DOM is a dynamic, mutable (changeable) object tree instantiated (created) by the browser.
 
 - **HTML file** – Static markup file on disk (`.html`)
 - **DOM** – Runtime object tree in browser memory
 
 **Instantiation flow:**
 
-1. Browser fetches and parses HTML markup
+1. Browser fetches and parses (reads and breaks down) HTML markup
 2. Parser constructs DOM tree corresponding to element hierarchy
 3. Browser renders tree to viewport
-4. JavaScript can now query and mutate DOM nodes at runtime
+4. JavaScript can now query and mutate (change) DOM nodes at runtime
 
-**Relevance:** JavaScript operates exclusively on DOM nodes, not the source HTML file. All DOM modifications are transient unless persisted server-side.
+**Relevance:** JavaScript operates exclusively on DOM nodes, not the source HTML file. All DOM modifications are transient (temporary) unless persisted (saved) server-side.
 
 ---
 
@@ -206,7 +206,7 @@ const childrenArray = [...parent.children];
 
 ## 🧠 What is a JavaScript Event?
 
-**Events** represent user interactions and browser lifecycle changes that an application can subscribe to and handle.
+**Events** represent user interactions and browser lifecycle changes that an application can subscribe to (listen for) and handle.
 
 **Event types:**
 
@@ -242,7 +242,7 @@ element.addEventListener("click", (event) => {
 });
 ```
 
-**Event handler** = Callback function registered as listener. Executes asynchronously upon event occurrence.
+**Event handler** = Callback function registered as listener. Executes asynchronously (independently, when event occurs) upon event occurrence.
 
 ---
 

@@ -11,7 +11,7 @@ An **API Route** is a server endpoint (URL + HTTP method combination) that recei
 1. Client constructs HTTP request targeting specific endpoint (e.g., `GET /puppies`)
 2. Server's routing layer matches request to handler function based on method and path
 3. Handler executes business logic (database queries, validation, computation)
-4. Server serializes response (typically JSON) with appropriate HTTP status code
+4. Server serializes response (converts data to JSON format) with appropriate HTTP status code
 5. Client receives response and processes data or error state
 
 ---
@@ -33,9 +33,10 @@ An **API Route** is a server endpoint (URL + HTTP method combination) that recei
 
 #### 🔍 **GET** – Read Data (Safe & Idempotent)
 
-- **Semantics:** Retrieves resource representation without modifying server state
-- **Idempotency:** Multiple identical requests produce identical results; no side effects
-- **Cacheability:** Responses eligible for HTTP caching mechanisms
+- **What it does:** Retrieves data from the server without making any changes
+- **Safe:** GET requests never modify server data (read-only)
+- **Idempotent:** You can call it multiple times and get the same result—no harm in repeating it
+- **Cacheable:** Browsers and servers can store the response and reuse it without hitting the server again (for performance)
 - **Example use cases:**
   ```js
   GET / friends; // Get all your friends
@@ -46,8 +47,10 @@ An **API Route** is a server endpoint (URL + HTTP method combination) that recei
 
 #### ✏️ **POST** – Create New Data
 
-- **Semantics:** Submits data to server for resource creation; may trigger side effects
-- **Non-Idempotent:** Repeated requests create multiple resources (unless client implements deduplication)
+- **What it does:** Sends data to server to create a new resource
+- **Side Effects:** Modifies server state (creates something new)
+- **Non-Idempotent:** If you send the same POST twice, it creates TWO resources (not one). This can cause problems, so be careful.
+- **Not Cacheable:** Response shouldn't be cached because each POST request changes the server
 - **Example use cases:**
   ```js
   POST /puppies { name: "Buddy", breed: "Golden" }  // Create new puppy
@@ -57,22 +60,24 @@ An **API Route** is a server endpoint (URL + HTTP method combination) that recei
 
 #### ✏️ **PUT** – Replace Entire Resource
 
-- **Semantics:** Replaces entire resource representation; idempotent operation
-- **Practical Use:** Less common in modern APIs; PATCH preferred for partial updates
+- **What it does:** Replaces ALL the data for a specific resource with new data
+- **Idempotent:** Calling it multiple times has the same effect as calling it once (safe to repeat)
+- **When to use:** Less common in modern APIs; PATCH is preferred because it's safer (doesn't accidentally delete other fields)
 - **Example:**
   ```js
   PUT /puppies/9 { name: "Max", breed: "Labrador", age: 5 }
-  // Replaces EVERYTHING for puppy #9
+  // Replaces EVERYTHING for puppy #9 with the new data
   ```
 
 #### 🔄 **PATCH** – Partial Update
 
-- **Semantics:** Applies partial modifications to resource; updates specified fields only
-- **Prevalence:** Industry standard for update operations in modern REST APIs
+- **What it does:** Updates ONLY the fields you send; leaves everything else unchanged
+- **Idempotent:** Calling it multiple times has the same effect (safe to repeat)
+- **Why it's preferred:** Safer than PUT because you won't accidentally overwrite other fields
 - **Example:**
   ```js
   PATCH /puppies/7 { name: "NewName" }
-  // Only updates the name, other fields unchanged
+  // Only updates the name, other fields (breed, age) stay the same
   ```
 
 #### 🗑️ **DELETE** – Remove Data
@@ -103,7 +108,7 @@ REST provides a **consistent, predictable way** to communicate with servers:
 
 > "A Promise represents the eventual completion (or failure) of an asynchronous operation and its resulting value." – **MDN**
 
-**Why Promises?** When you fetch data from a server, it takes TIME. You can't wait for it to complete before running other code. Promises let you say "When this finishes, do this."
+**Why Promises?** When you fetch data from a server, it takes TIME. Async (asynchronous = operations that don't complete immediately) means you can't wait for it to finish before running other code. Promises let you say "When this finishes, do this."
 
 #### Promise States:
 

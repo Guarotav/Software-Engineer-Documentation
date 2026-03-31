@@ -4,12 +4,12 @@
 
 ## 🧠 What is Socket.IO?
 
-Socket.IO is a **real-time communication library** that enables **bidirectional, event-based messaging** between server and connected clients over a persistent connection.
+Socket.IO is a **real-time communication library** that enables **bidirectional (two-way), event-based messaging** between server and connected clients over a **persistent connection** (stays open continuously between client and server).
 
 **Key distinction from HTTP:**
 
 - **HTTP (Request/Response):** Client initiates request → Server processes and responds → Connection terminates. Server cannot independently send data to clients.
-- **Socket.IO (Persistent Connection):** Initiates persistent WebSocket connection (with fallback to polling if needed) → Server can emit events to clients at any time → Both client and server can asynchronously send messages.
+- **Socket.IO (Persistent Connection):** Initiates persistent WebSocket connection (continuous channel that stays open) with fallback to polling (repeatedly asking the server "Is there anything new?") if needed → Server can emit events (send messages) to clients at any time → Both client and server can asynchronously (independently, without waiting for a response) send messages.
 
 ---
 
@@ -61,8 +61,8 @@ Once connected, either side can send messages anytime without re-establishing th
 const io = require("socket.io")(server);
 ```
 
-- **Initializes Socket.IO** on your HTTP server
-- Tells the server to listen for incoming Socket.IO connections
+- Instantiates (creates) Socket.IO server instance attached to HTTP server
+- Configures (sets up) server to accept WebSocket upgrade requests from clients
 
 ```js
 io.on("connection", (socket) => {
@@ -71,7 +71,7 @@ io.on("connection", (socket) => {
 });
 ```
 
-- Registers connection event handler executed upon each new client connection
+- Registers (sets up) connection event handler executed upon each new client connection
 - `socket` parameter represents the client connection context with unique identifier
 - Each socket instance maintains isolated event handlers and bidirectional communication channel
 - Connection handlers define all upstream event listeners for that client
@@ -80,7 +80,7 @@ io.on("connection", (socket) => {
 
 ### 📤 Sending Events (Server Broadcasting)
 
-**Event emission targets:** The server can broadcast events to various recipient groups depending on architectural needs.
+**Event emission targets:** The server can broadcast events (send messages) to various recipient groups depending on architectural needs.
 
 #### 1️⃣ Unicast – Single Client:
 
@@ -89,7 +89,7 @@ socket.emit("event", data);
 ```
 
 - **Delivery:** Only specified client receives event
-- **Semantics:** Point-to-point communication; used for client-specific state or confirmations
+- **Semantics:** Point-to-point communication (direct, one-to-one); used for client-specific state or confirmations
 
 #### 2️⃣ Broadcast – All Clients:
 
